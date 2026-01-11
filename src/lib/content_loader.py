@@ -94,7 +94,7 @@ class ContentLoader:
 
         return None
 
-    @log_performance
+    @log_performance()
     def get_all_chapters(self) -> List[Chapter]:
         """
         Get all chapters ordered by chapter_number.
@@ -140,7 +140,7 @@ class ContentLoader:
             )
             raise ContentLoaderError(f"Failed to load chapters: {e}") from e
 
-    @log_performance
+    @log_performance()
     def get_chapter_by_id(self, chapter_id: UUID) -> Chapter:
         """
         Get a single chapter by ID with lessons.
@@ -197,7 +197,7 @@ class ContentLoader:
             )
             raise ContentLoaderError(f"Failed to load chapter: {e}") from e
 
-    @log_performance
+    @log_performance()
     def get_chapter_by_number(self, chapter_number: int) -> Chapter:
         """
         Get a chapter by its number (1-4).
@@ -254,7 +254,7 @@ class ContentLoader:
             )
             raise ContentLoaderError(f"Failed to load chapter: {e}") from e
 
-    @log_performance
+    @log_performance()
     def get_lesson_by_id(self, lesson_id: UUID) -> Lesson:
         """
         Get a single lesson by ID with videos and parent chapter.
@@ -314,7 +314,7 @@ class ContentLoader:
             )
             raise ContentLoaderError(f"Failed to load lesson: {e}") from e
 
-    @log_performance
+    @log_performance()
     def get_lessons_by_chapter(self, chapter_id: UUID) -> List[Lesson]:
         """
         Get all lessons for a chapter, ordered by lesson_number.
@@ -368,7 +368,7 @@ class ContentLoader:
             )
             raise ContentLoaderError(f"Failed to load lessons: {e}") from e
 
-    @log_performance
+    @log_performance()
     def get_active_videos_for_lesson(self, lesson_id: UUID) -> List[Video]:
         """
         Get all active videos for a lesson, ordered by display_order.

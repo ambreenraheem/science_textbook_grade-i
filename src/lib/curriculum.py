@@ -15,9 +15,9 @@ from uuid import UUID, uuid4
 
 from sqlalchemy import (
     Boolean, CheckConstraint, Column, ForeignKey, Integer, String,
-    Text, TIMESTAMP, UniqueConstraint
+    Text, TIMESTAMP, UniqueConstraint, JSON
 )
-from sqlalchemy.dialects.postgresql import JSONB, UUID as PGUUID
+from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -156,7 +156,7 @@ class Lesson(Base):
         nullable=False
     )
     daily_life_examples: Mapped[list] = mapped_column(
-        JSONB,
+        JSON,
         nullable=False,
         default=list
     )

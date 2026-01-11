@@ -176,54 +176,73 @@ def get_child_friendly_message(error_type: str, default: Optional[str] = None) -
     )
 
 
-def log_performance(
-    logger: logging.Logger,
-    operation: str,
-    duration_ms: float,
-    threshold_ms: float = 500.0
-) -> None:
+def log_performance(threshold_ms: float = 500.0):
     """
-    Log performance metrics and warn if threshold exceeded.
+    Decorator to log performance metrics and warn if threshold exceeded.
 
     Per Constitution IX, database queries should be <500ms p95.
 
     Args:
-        logger: Logger instance
-        operation: Name of the operation (e.g., "get_lessons_by_chapter")
-        duration_ms: Duration in milliseconds
         threshold_ms: Performance threshold in milliseconds (default: 500ms)
+
+    Returns:
+        Decorator function
 
     Example:
         ```python
-        import time
         from src.utils.logger import get_logger, log_performance
 
         logger = get_logger(__name__)
 
-        start = time.time()
-        # Perform database query
-        duration_ms = (time.time() - start) * 1000
-
-        log_performance(logger, "get_all_chapters", duration_ms)
+        @log_performance(threshold_ms=100)
+        def get_all_chapters(self):
+            # Database query
+            pass
         ```
     """
-    log_data = {
-        "operation": operation,
-        "duration_ms": round(duration_ms, 2),
-        "threshold_ms": threshold_ms,
-        "exceeded_threshold": duration_ms > threshold_ms,
-    }
+    import time
+    import functools
 
-    if duration_ms > threshold_ms:
-        logger.warning(
-            f"Performance threshold exceeded for {operation}",
-            extra=log_data
-        )
-    else:
-        logger.info(
-            f"Performance OK for {operation}",
-            extra=log_data
-        )
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            # Get logger from the class instance (self) if it's a method
+            if args and hasattr(args[0], '__class__'):
+                logger_name = f"{args[0].__class__.__module__}.{args[0].__class__.__name__}"
+                func_logger = get_logger(logger_name)
+            else:
+                func_logger = get_logger(func.__module__)
+
+            operation_name = func.__qualname__
+
+            start_time = time.perf_counter()
+            try:
+                result = func(*args, **kwargs)
+                return result
+            finally:
+                end_time = time.perf_counter()
+                duration_ms = (end_time - start_time) * 1000
+
+                log_data = {
+                    "operation": operation_name,
+                    "duration_ms": round(duration_ms, 2),
+                    "threshold_ms": threshold_ms,
+                    "exceeded_threshold": duration_ms > threshold_ms,
+                }
+
+                if duration_ms > threshold_ms:
+                    func_logger.warning(
+                        f"Performance threshold exceeded for {operation_name}",
+                        extra=log_data
+                    )
+                else:
+                    func_logger.debug(
+                        f"Performance OK for {operation_name}",
+                        extra=log_data
+                    )
+
+        return wrapper
+    return decorator
 
 
 def log_user_action(
