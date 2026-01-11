@@ -430,6 +430,70 @@ class ContentLoader:
         self._cache_timestamps.clear()
         logger.info("Content cache cleared")
 
+    @log_performance()
+    def get_next_lesson(self, chapter_id: UUID, current_lesson_number: int) -> Optional[Lesson]:
+        """
+        Get the next lesson in sequence within the same chapter.
+
+        Args:
+            chapter_id: UUID of the chapter
+            current_lesson_number: Current lesson number
+
+        Returns:
+            Next Lesson object or None if current lesson is the last
+
+        Raises:
+            ContentLoaderError: If database query fails
+        """
+        try:
+            with self.db.get_session() as session:
+                stmt = (
+                    select(Lesson)
+                    .options(
+                        selectinload(Lesson.videos),
+                        selectinload(Lesson.chapter)
+                    )
+                    .where(
+                        Lesson.chapter_id == chapter_id,
+                        Lesson.lesson_number == current_lesson_number + 1
+                    )
+                )
+                result = session.execute(stmt)
+                next_lesson = result.scalar_one_or_none()
+
+                if next_lesson:
+                    logger.info(
+                        f"Found next lesson: {next_lesson.title}",
+                        extra={
+                            "chapter_id": str(chapter_id),
+                            "current_lesson_number": current_lesson_number,
+                            "next_lesson_number": next_lesson.lesson_number
+                        }
+                    )
+                else:
+                    logger.debug(
+                        f"No next lesson found (last lesson in chapter)",
+                        extra={
+                            "chapter_id": str(chapter_id),
+                            "current_lesson_number": current_lesson_number
+                        }
+                    )
+
+                return next_lesson
+
+        except Exception as e:
+            logger.error(
+                "Failed to get next lesson",
+                extra={
+                    "chapter_id": str(chapter_id),
+                    "current_lesson_number": current_lesson_number,
+                    "error": str(e),
+                    "error_type": type(e).__name__,
+                    "child_friendly": "database_error"
+                }
+            )
+            raise ContentLoaderError(f"Failed to get next lesson: {e}") from e
+
     def get_cache_stats(self) -> Dict[str, Any]:
         """
         Get cache statistics.
