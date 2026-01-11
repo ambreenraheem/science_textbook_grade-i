@@ -1,0 +1,342 @@
+/*
+ * Child-Friendly Styles for Grade-1 Science Learning App
+ *
+ * Design Principles (from research.md):
+ * - Large fonts: 18-24pt body, 28-36pt headings
+ * - Touch targets: minimum 48x48px
+ * - High contrast: 4.5:1 minimum (WCAG AA)
+ * - Bright but soft colors
+ * - One concept per screen (minimal clutter)
+ *
+ * Color Palette:
+ * - Sky Blue: #87CEEB (primary)
+ * - Grass Green: #90EE90 (success)
+ * - Sunshine Yellow: #FFD700 (highlights)
+ * - Soft Pink: #FFB6C1 (secondary)
+ * - Warm Orange: #FFA500 (alerts)
+ * - White: #FFFFFF (backgrounds)
+ * - Dark Gray: #333333 (text, 12.6:1 contrast ratio)
+ */
+
+/* ============================================================================
+   Global Styles
+   ============================================================================ */
+
+:root {
+    /* Colors */
+    --color-primary: #87CEEB;
+    --color-success: #90EE90;
+    --color-highlight: #FFD700;
+    --color-secondary: #FFB6C1;
+    --color-alert: #FFA500;
+    --color-background: #FFFFFF;
+    --color-text: #333333;
+
+    /* Typography */
+    --font-size-body: 20px;  /* 20pt for readability */
+    --font-size-large: 24px;  /* 24pt for emphasis */
+    --font-size-heading: 32px;  /* 32pt for headings */
+    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+
+    /* Spacing */
+    --spacing-xs: 8px;
+    --spacing-sm: 16px;
+    --spacing-md: 24px;
+    --spacing-lg: 32px;
+    --spacing-xl: 48px;
+
+    /* Touch Targets */
+    --min-touch-target: 48px;
+}
+
+body {
+    font-family: var(--font-family);
+    font-size: var(--font-size-body);
+    line-height: 1.6;
+    color: var(--color-text);
+    background-color: var(--color-background);
+    margin: 0;
+    padding: var(--spacing-md);
+}
+
+/* ============================================================================
+   Typography
+   ============================================================================ */
+
+h1, h2, h3 {
+    color: var(--color-text);
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.3;
+}
+
+h1 {
+    font-size: var(--font-size-heading);  /* 32pt */
+}
+
+h2 {
+    font-size: 28px;  /* 28pt */
+}
+
+h3 {
+    font-size: var(--font-size-large);  /* 24pt */
+}
+
+p {
+    font-size: var(--font-size-body);
+    margin-bottom: var(--spacing-sm);
+    max-width: 80ch;  /* Limit line length for readability */
+}
+
+/* ============================================================================
+   Buttons & Interactive Elements
+   ============================================================================ */
+
+button, .button, .stButton > button {
+    min-height: var(--min-touch-target);  /* 48px touch target */
+    min-width: var(--min-touch-target);
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-large);
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button:hover, .button:hover, .stButton > button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+button:active, .button:active, .stButton > button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Primary button (chapter cards, lesson cards) */
+.button-primary, .stButton > button[kind="primary"] {
+    background-color: var(--color-primary);
+    color: var(--color-text);
+}
+
+/* Success button (next lesson, continue) */
+.button-success, .stButton > button[kind="secondary"] {
+    background-color: var(--color-success);
+    color: var(--color-text);
+}
+
+/* ============================================================================
+   Cards (Chapters & Lessons)
+   ============================================================================ */
+
+.card {
+    background-color: var(--color-background);
+    border-radius: 16px;
+    padding: var(--spacing-md);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    margin-bottom: var(--spacing-md);
+    min-height: var(--min-touch-target);  /* Touch target */
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+}
+
+.card-title {
+    font-size: var(--font-size-large);
+    font-weight: 700;
+    margin-bottom: var(--spacing-xs);
+    color: var(--color-text);
+}
+
+.card-image {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    margin-bottom: var(--spacing-sm);
+}
+
+/* ============================================================================
+   Content Layout
+   ============================================================================ */
+
+.content-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-md);
+}
+
+.lesson-content {
+    background-color: var(--color-background);
+    padding: var(--spacing-lg);
+    border-radius: 16px;
+    margin-bottom: var(--spacing-md);
+}
+
+.lesson-heading {
+    font-size: var(--font-size-heading);
+    color: var(--color-text);
+    margin-bottom: var(--spacing-md);
+    text-align: center;
+}
+
+.lesson-text {
+    font-size: var(--font-size-large);
+    line-height: 1.8;
+    margin-bottom: var(--spacing-md);
+}
+
+.lesson-image {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    border-radius: 16px;
+    margin: var(--spacing-md) auto;
+    display: block;
+}
+
+/* ============================================================================
+   Examples & Highlights
+   ============================================================================ */
+
+.example-box {
+    background-color: var(--color-highlight);
+    padding: var(--spacing-md);
+    border-radius: 12px;
+    margin: var(--spacing-md) 0;
+    border-left: 4px solid var(--color-alert);
+}
+
+.example-text {
+    font-size: var(--font-size-body);
+    color: var(--color-text);
+    margin: var(--spacing-xs) 0;
+}
+
+/* ============================================================================
+   Error Messages (Child-Friendly)
+   ============================================================================ */
+
+.error-message {
+    background-color: var(--color-secondary);
+    color: var(--color-text);
+    padding: var(--spacing-md);
+    border-radius: 12px;
+    font-size: var(--font-size-large);
+    text-align: center;
+    margin: var(--spacing-md) 0;
+}
+
+/* ============================================================================
+   Loading States
+   ============================================================================ */
+
+.loading-spinner {
+    border: 4px solid var(--color-background);
+    border-top: 4px solid var(--color-primary);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    animation: spin 1s linear infinite;
+    margin: var(--spacing-lg) auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ============================================================================
+   Video Player
+   ============================================================================ */
+
+.video-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: var(--spacing-md) auto;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.video-container iframe {
+    width: 100%;
+    height: 450px;
+    border: none;
+}
+
+/* ============================================================================
+   Navigation
+   ============================================================================ */
+
+.navigation-buttons {
+    display: flex;
+    gap: var(--spacing-md);
+    margin: var(--spacing-lg) 0;
+    flex-wrap: wrap;
+}
+
+.nav-button {
+    flex: 1;
+    min-width: 200px;
+}
+
+/* ============================================================================
+   Responsive Design
+   ============================================================================ */
+
+/* Tablets (9+ inches per research.md) */
+@media (max-width: 1024px) {
+    :root {
+        --font-size-body: 22px;  /* Slightly larger on tablets */
+        --font-size-heading: 36px;
+    }
+
+    .navigation-buttons {
+        flex-direction: column;
+    }
+}
+
+/* Small screens (still support, but not primary target) */
+@media (max-width: 768px) {
+    :root {
+        --font-size-body: 20px;
+        --font-size-heading: 28px;
+        --spacing-md: 16px;
+    }
+
+    body {
+        padding: var(--spacing-sm);
+    }
+}
+
+/* ============================================================================
+   Accessibility
+   ============================================================================ */
+
+/* Focus states for keyboard navigation */
+button:focus, .button:focus, a:focus {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Ensure sufficient contrast */
+::selection {
+    background-color: var(--color-highlight);
+    color: var(--color-text);
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
